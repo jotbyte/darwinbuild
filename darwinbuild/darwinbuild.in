@@ -869,7 +869,7 @@ if [ "$EXIT_STATUS" == "0" ]; then
 	###
 
 	if [ "$action" == "installhdrs" ]; then
-	    	### Output the manifest
+		### Output the manifest
 		MANIFEST="/tmp/$projnam.$$"
 		"$DARWINXREF" register "$projnam" "$DSTROOT" | tee "$MANIFEST"
 		SHA1=$(cat "$MANIFEST" | $DIGEST)
