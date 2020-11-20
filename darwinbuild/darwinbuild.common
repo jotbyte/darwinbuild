@@ -356,13 +356,13 @@ function InstallHeader() {
 	# install a self-built root, or a prebuilt root, or nothing
 	if [ $InstallSelfBuiltHeader -eq 1 ]; then
 		echo "Copying $Project from $SelfBuiltHeader ..."
-		cp -afPR $SelfBuiltHeader/ "$BuildRoot/Developer/SDKs/PureDarwin.sdk"
+		_CopyRoot $SelfBuiltHeader/ "$BuildRoot/Developer/SDKs/PureDarwin.sdk"
 		"$DARWINXREF" register "$Project" "$SelfBuiltHeader"  > /dev/null
 		TouchReceipt "$BuildRoot" "$Project" "hdrs"
 		return 0
 	elif [ $InstallSelfBuiltRoot -eq 1 ]; then
 		echo "Copying $Project from $SelfBuiltRoot ..."
-		cp -afPR $SelfBuiltRoot/ "$BuildRoot/Developer/SDKs/PureDarwin.sdk"
+		_CopyRoot $SelfBuiltRoot/ "$BuildRoot/Developer/SDKs/PureDarwin.sdk"
 		"$DARWINXREF" register "$Project" "$SelfBuiltRoot"  > /dev/null
 		TouchReceipt "$BuildRoot" "$Project" "root"
 		return 0
