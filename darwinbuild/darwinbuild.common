@@ -167,6 +167,7 @@ function _CopyRoot() {
 		line=$(echo $line | sed -Ee "s,$src/?,,g")
 
 		if [ -d "$src/$line" ]; then
+			rm -f $dstroot/$line
 			mkdir -p $dstroot/$line
 		else
 			if [ -L "$line" ]; then
