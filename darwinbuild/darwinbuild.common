@@ -179,6 +179,7 @@ function _CopyRoot() {
 				popd > /dev/null
 			else
 				mkdir -p $(dirname $dstroot/$line)
+				rm -f $dstroot/$line
 				ditto $src/$line $dstroot/$line
 			fi
 		fi
