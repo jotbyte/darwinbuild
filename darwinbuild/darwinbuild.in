@@ -678,7 +678,7 @@ elif [ "$target" != "" ]; then
 fi
 
 if [ "$buildtool" == "make" ]; then
-	build_string="$build_string DEPROOT=$BuildRoot/Developer/SDKs/PureDarwin.sdk"
+	build_string="$build_string DEPROOT=$BuildRoot/Developer/SDKs/MacOSX.sdk"
 fi
 
 #
@@ -747,7 +747,7 @@ EOF
 build_string="$build_string \"SRCROOT=$SRCROOT\" \"OBJROOT=$OBJROOT\" \"SYMROOT=$SYMROOT\" \"DSTROOT=$DSTROOT\""
 
 if [ "$buildtool" == "xcodebuild" -a "$use_sdkroot" == "true" ]; then
-	build_string="$build_string SDKROOT=$BuildRoot/Developer/SDKs/PureDarwin.sdk"
+	build_string="$build_string SDKROOT=$BuildRoot/Developer/SDKs/MacOSX.sdk"
 fi
 
 XREF_ENV=$($DARWINXREF environment $projnam)
