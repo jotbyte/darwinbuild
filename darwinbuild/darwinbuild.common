@@ -166,21 +166,21 @@ function _CopyRoot() {
 	while read line; do
 		line=$(echo $line | sed -Ee "s,$src/?,,g")
 
-		if [ -d "$src/$line" ]; then
-			if [ -L $dstroot/$line ]; then
-				rm $dstroot/$line
-			fi
+		if [ -L "$src/$line" ]; then
+			dirname=$(dirname $line)
+			basename=$(basename $line)
 
-			mkdir -p $dstroot/$line
+			pushd $dstroot/$dirname > /dev/null
+			rm $basename
+			ln -s "$(readlink $src/$line)" $basename
+			popd > /dev/null
 		else
-			if [ -L "$line" ]; then
-				dirname=$(dirname $line)
-				basename=$(basename $line)
+			if [ -d "$src/$line" ]; then
+				if [ -L $dstroot/$line ]; then
+					rm $dstroot/$line
+				fi
 
-				pushd $dstroot/$dirname > /dev/null
-				rm $basename
-				ln -s "$(readlink $src/$line)" $basename
-				popd > /dev/null
+				mkdir -p $dstroot/$line
 			else
 				mkdir -p $(dirname $dstroot/$line)
 				rm -f $dstroot/$line
