@@ -596,7 +596,31 @@ function CreatePureDarwinSDK() {
 	ditto ${APPLE_SDK}/usr/lib/swift ${OUR_SDK}/usr/lib/swift
 
 	mkdir -p $OUR_SDK/System/Library/Frameworks
+	pushd $APPLE_SDK/System/Library/Frameworks > /dev/null
+
+	# All the egrep -v's are here to filter out nested frameworks.
+	# This list needs to be kept in sync with the Apple SDK.
+	# Always include '/Versions' at the end, since we only want
+	# to symlink the top-level framework.
+	find . -name \*.framework | \
+		egrep -v 'Accelerate\.framework/Versions' | \
+		egrep -v 'ApplicationServices\.framework/Versions' | \
+		egrep -v 'AutomaticAssessmentConfiguration\.framework/Versions' | \
+		egrep -v 'Carbon\.framework/Versions' | \
+		egrep -v 'CoreServices\.framework/Versions' | \
+		egrep -v 'IMServicePlugIn\.framework/Versions' | \
+		egrep -v 'MetalPerformanceShaders\.framework/Versions' | \
+		egrep -v 'OpenDirectory\.framework/Versions' | \
+		egrep -v 'Quartz\.framework/Versions' | \
+		egrep -v 'WebKit\.framework/Versions' \
+	> /tmp/sdk-sys.$$.txt
+
+	mkdir -p $OUR_SDK/System/Library/Frameworks
 	mkdir -p $OUR_SDK/System/Library/PrivateFrameworks
+	while read line; do
+		_CreatePureDarwinSDKFile $OUR_SDK "System/Library/Frameworks/$line"
+	done < /tmp/sdk-sys.$$.txt
+	rm -f /tmp.sdk-sys.$$.txt
 
 	popd > /dev/null
 	IFS=$OLD_IFS
