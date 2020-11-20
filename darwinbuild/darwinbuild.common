@@ -155,6 +155,32 @@ function Download() {
 	done
 }
 
+function _CopyRoot() {
+	local src="$1"
+	local dstroot="$2"
+
+	find $src -print0 | xargs -0 -L 1 echo | while read line; do
+		line=$(echo $line | sed -Ee "s,$src/?,,g")
+
+		if [ -d "$src/$line" ]; then
+			mkdir -p $dstroot/$line
+		else
+			if [ -L "$line" ]; then
+				dirname=$(dirname $line)
+				basename=$(basename $line)
+
+				pushd $dstroot/$dirname > /dev/null
+				rm $basename
+				ln -s "$(readlink $src/$line)" $basename
+				popd > /dev/null
+			else
+				mkdir -p $(dirname $dstroot/$line)
+				ditto $src/$line $dstroot/$line
+			fi
+		fi
+	done
+}
+
 ###
 ### Installs a root into the BuildRoot. Mediates between
 ### receipts, pre-built roots, and self-built roots, so that
@@ -206,7 +232,7 @@ function InstallRoot() {
 	# install a self-built root, or a prebuilt root, or nothing
 	if [ $InstallSelfBuiltRoot -eq 1 ]; then
 		echo "Copying $Project from $SelfBuiltRoot ..."
-		cp -afPR $SelfBuiltRoot/ "$BuildRoot/Developer/SDKs/PureDarwin.sdk"
+		_CopyRoot "$SelfBuiltRoot" "$BuildRoot/Developer/SDKs/PureDarwin.sdk"
 
 		"$DARWINXREF" register "$Project" "$SelfBuiltRoot"  > /dev/null
 		TouchReceipt "$BuildRoot" "$Project" "root"
