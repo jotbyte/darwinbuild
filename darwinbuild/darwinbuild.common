@@ -637,7 +637,7 @@ function CreatePureDarwinSDK() {
 	while read line; do
 		_CreatePureDarwinSDKFile $OUR_SDK $APPLE_SDK "System/Library/Frameworks/$line"
 	done < /tmp/sdk-sys.$$.txt
-	rm -f /tmp.sdk-sys.$$.txt
+	rm -f /tmp/sdk-sys.$$.txt
 
 	popd > /dev/null
 	IFS=$OLD_IFS
