@@ -162,18 +162,13 @@ function _CopyRoot() {
 	OLD_IFS=$IFS
 	IFS='
 '
-	find $src > /tmp/root.$$.txt
+	find $src '!' -type l > /tmp/root.$$.txt
 	while read line; do
 		line=$(echo $line | sed -Ee "s,$src/?,,g")
 
 		if [ -L "$src/$line" ]; then
-			dirname=$(dirname $line)
-			basename=$(basename $line)
-
-			pushd $dstroot/$dirname > /dev/null
-			rm $basename
-			ln -s "$(readlink $src/$line)" $basename
-			popd > /dev/null
+			echo "Error: We should not see any symbolic links here"
+			exit 1
 		else
 			if [ -d "$src/$line" ]; then
 				if [ -L $dstroot/$line ]; then
@@ -189,6 +184,21 @@ function _CopyRoot() {
 		fi
 	done < /tmp/root.$$.txt
 	rm /tmp/root.$$.txt
+
+	# Symbolic links must be processed last, so that their
+	# targets are all created beforehand.
+	find $src -type l > /tmp/root-links.$$.txt
+	while read line; do
+		line=$(echo $line | sed -Ee "s,$src/?,,g")
+		dirname=$(dirname $line)
+		basename=$(basename $line)
+
+		pushd $dstroot/$dirname > /dev/null
+		rm -f $basename
+		ln -s "$(readlink $src/$line)" $basename
+		popd > /dev/null
+	done < /tmp/root-links.$$.txt
+	rm /tmp/root-links.$$.txt
 
 	IFS=$OLD_IFS
 }
