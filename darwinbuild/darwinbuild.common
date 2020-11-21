@@ -198,7 +198,7 @@ function _CopyRoot() {
 		ln -s "$(readlink $src/$line)" $basename
 		popd > /dev/null
 	done < /tmp/root-links.$$.txt
-	rm /tmp/root-links.$$.txt
+	rm -f /tmp/root-links.$$.txt
 
 	IFS=$OLD_IFS
 }
