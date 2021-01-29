@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXAggregateTarget section */
@@ -151,6 +151,8 @@
 		72574B5D1097A37600B13BC3 /* configuration.c in Sources */ = {isa = PBXBuildFile; fileRef = 72C86BF510965EEA00C66E90 /* configuration.c */; };
 		72C86C68109663D300C66E90 /* darwintrace.c in Sources */ = {isa = PBXBuildFile; fileRef = 72C86BD910965E0A00C66E90 /* darwintrace.c */; };
 		72D05CB811D2680500B33EDD /* query.c in Sources */ = {isa = PBXBuildFile; fileRef = 72D05CA911D2678F00B33EDD /* query.c */; };
+		F5F236BB25C4939200FCC7BC /* receipts.c in Sources */ = {isa = PBXBuildFile; fileRef = F5F236BA25C4939200FCC7BC /* receipts.c */; };
+		F5F236BE25C493C500FCC7BC /* darwinbuild.c in Sources */ = {isa = PBXBuildFile; fileRef = F5F236BC25C493C400FCC7BC /* darwinbuild.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -765,6 +767,9 @@
 		DF6BE303132C5EBD00793781 /* redirection-test */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "redirection-test"; sourceTree = "<group>"; };
 		DF6BE304132C5EBD00793781 /* run-tests.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "run-tests.sh"; sourceTree = "<group>"; };
 		DF6BE31F132C5EBD00793781 /* run-all-tests.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "run-all-tests.sh"; sourceTree = "<group>"; };
+		F5F236BA25C4939200FCC7BC /* receipts.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = receipts.c; path = darwinbuild/receipts.c; sourceTree = "<group>"; };
+		F5F236BC25C493C400FCC7BC /* darwinbuild.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = darwinbuild.c; path = darwinbuild/darwinbuild.c; sourceTree = "<group>"; };
+		F5F236BD25C493C400FCC7BC /* darwinbuild.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = darwinbuild.h; path = darwinbuild/darwinbuild.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1076,6 +1081,9 @@
 		72C86BD510965DC900C66E90 /* darwinbuild */ = {
 			isa = PBXGroup;
 			children = (
+				F5F236BD25C493C400FCC7BC /* darwinbuild.h */,
+				F5F236BC25C493C400FCC7BC /* darwinbuild.c */,
+				F5F236BA25C4939200FCC7BC /* receipts.c */,
 				720BE2E9120C909E00B3C4A5 /* digest.c */,
 				7227AB871098A7BF00BE33D7 /* buildlist */,
 				7227AB881098A7BF00BE33D7 /* buildorder */,
@@ -1818,6 +1826,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 72C86C3D1096607A00C66E90 /* Build configuration list for PBXNativeTarget "darwinbuild" */;
 			buildPhases = (
+				F5F236B825C4923300FCC7BC /* Sources */,
 				7227AB8F1098A89700BE33D7 /* Run Script */,
 				7227ABE61098D5E400BE33D7 /* Run Script */,
 				1F06C5B52023EB1D003EBE6C /* ShellScript */,
@@ -1963,7 +1972,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "mkdir -p $DSTROOT/usr/local/bin\n/bin/cp $BUILT_PRODUCTS_DIR/darwinbuild $DSTROOT/usr/local/bin";
+			shellScript = "mkdir -p $DSTROOT/usr/local/bin\n/bin/cp $BUILT_PRODUCTS_DIR/darwinbuild $DSTROOT/usr/local/bin\n";
 			showEnvVarsInLog = 0;
 		};
 		1F71A4FE2030F7A700020E2F /* ShellScript */ = {
@@ -2016,7 +2025,6 @@
 		};
 		1FDE256B24D75BFD00CBC605 /* Vendor Tcl */ = {
 			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
 			buildActionMask = 12;
 			files = (
 			);
@@ -2050,7 +2058,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/bin/sed -e \"s,%%PREFIX%%,$PREFIX,\" $SRCROOT/darwinbuild/darwinbuild.in > $DERIVED_FILE_DIR/darwinbuild\n\n/bin/chmod 755 $DERIVED_FILE_DIR/darwinbuild\n\n";
+			shellScript = "/usr/bin/sed -e \"s,%%PREFIX%%,$PREFIX,\" $SRCROOT/darwinbuild/darwinbuild.h > $DERIVED_FILE_DIR/darwinbuild\n\n/bin/chmod 755 $DERIVED_FILE_DIR/darwinbuild\n\n";
 		};
 		7227ABE61098D5E400BE33D7 /* Run Script */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2066,7 +2074,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/bin/cp $DERIVED_FILE_DIR/darwinbuild $BUILT_PRODUCTS_DIR/darwinbuild";
+			shellScript = "/bin/cp $DERIVED_FILE_DIR/darwinbuild $BUILT_PRODUCTS_DIR/darwinbuild\n";
 		};
 		7227AC001098D78C00BE33D7 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2412,6 +2420,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F5F236BB25C4939200FCC7BC /* receipts.c in Sources */,
 				72C86C68109663D300C66E90 /* darwintrace.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2421,6 +2430,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				72D05CB811D2680500B33EDD /* query.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F5F236B825C4923300FCC7BC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F5F236BE25C493C500FCC7BC /* darwinbuild.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
