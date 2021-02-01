@@ -89,7 +89,7 @@ static void PrintInitHelp(){
 static void DarwinbuildInit(int argc, char *argv[]){
     int ch;
     char *build = NULL;
-    bool dmg = false;
+    bool nodmg = false;
     char **margv = argv; // preserve argv
     struct option arg_options[] = {
         { "init",           required_argument,  0, 0x30 },
@@ -109,7 +109,7 @@ static void DarwinbuildInit(int argc, char *argv[]){
                 break;
             case 0x40:
                 if(build == NULL) PrintInitHelp(); // -nodmg shouldn't be used alone
-                dmg = true;
+                nodmg = true;
                 break;
             default:
                 if(build){ // if there's some unexpected argument, abort.
@@ -132,28 +132,28 @@ static void DarwinbuildInit(int argc, char *argv[]){
     }
     // Otherwise initialize the build and exit.
     
-    int modes = S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH;
-    
+    String filename = String(basename(build));
+    String pdBuild = filename.substr(0, filename.length() + 1 - sizeof(".plist"));
+        
     if (checkDir("Roots")) {
-        mkdir("Roots", modes);
+        newDir("Roots");
     }
     if (checkDir("Sources")) {
-        mkdir("Sources", modes);
+        newDir("Sources");
     }
     if (checkDir("Symbols")) {
-        mkdir("Symbols", modes);
+        newDir("Symbols");
     }
     if (checkDir("Headers")) {
-        mkdir("Headers", modes);
+        newDir("Headers");
     }
     if (checkDir("Logs")) {
-        mkdir("Logs", modes);
+        newDir("Logs");
     }
     if (checkDir(".build")) {
-        mkdir(".build", modes);
+        newDir(".build");
     }
     
-    String filename = String(basename(build));
     
     if(checkFile(filename) == 0){
         copyfile(filename, String(".build/") + filename , false);
@@ -161,11 +161,18 @@ static void DarwinbuildInit(int argc, char *argv[]){
     else if (isURL(build)){
         DownloadFile(build, String(".build/") + filename);
     }
-//    else if (isSSH(build)){
-//
-//    }
+    else if (isSSH(build)){
+        std::cout << "SSH files not supported yet" << nl;
+        exit(0);
+    }
     
     // TODO: Fnish init functionality
+    if (nodmg) {
+        newDir("BuildRoot");
+    } else { // create DMG
+        std::string dmgfile = String("BuildRoot_") + pdBuild;
+        
+    }
     
     std::cout << "Initializing darwinbuild" << nl;
     exit(0);

@@ -135,7 +135,11 @@ int DownloadFile(std::string url, std::string filename){
 }
 
 int newDir(std::string dir){
-    
-    fs::create_directory(<#const path &__p#>, <#const path &__attrs#>, <#error_code &__ec#>)
-    return 0;
+    std::error_code err;
+    fs::create_directory(dir, err);
+    if(fs::exists(dir)){
+        fs::permissions(dir, fs::perms::owner_all | fs::perms::group_exec |
+                    fs::perms::group_read);
+    }
+    return err.value();
 }
