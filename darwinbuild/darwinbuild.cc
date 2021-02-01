@@ -35,17 +35,21 @@
  * This a replacement tool for the old Darwinbuild script.
  */
 
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
+#include <cstdlib>
+#include <cstdbool>
+#include <iostream>
+
 #include <libgen.h>
-#include <stdbool.h>
 #include <getopt.h>
 #include <sys/stat.h>
+#include <curl/curl.h>
 
 #include "darwinbuild.h"
 
-char *progname = NULL;
+#define nl std::endl
+typedef std::string String;
+
+String progname = String("(null)");
 
 enum {
     ACTION_HEADERS = 0x1,
@@ -57,7 +61,6 @@ enum {
 };
 typedef int actions_t;
 
-
 typedef struct options {
     // bool args
     bool nosource;
@@ -65,25 +68,25 @@ typedef struct options {
     bool noload;
     // string args
 //    char configuration[255];
-    char *build;
-    char *logdeps;
-    char *depsbuild;
-    char *codesign;
-    char *target;
+    String build;
+    String logdeps;
+    String depsbuild;
+    String codesign;
+    String target;
 } options_t;
 
 static void PrintInitHelp(){
-    fprintf(stdout,  "usage: %s -init <build> [-nodmg ]\n", progname);
-    fprintf(stdout,  "\n");
-    fprintf(stdout,  "  <build>       can be a standard build number or a path to a plist.\n");
-    fprintf(stdout,  "                supported user@host:/dir/file.plist,\n");
-    fprintf(stdout,  "                               http://host/dir/file.plist \n");
-    fprintf(stdout,  "                              paths: /dir/file.plist, \n");
-    fprintf(stdout,  "  -nodmg        do not use a sparse image for build root (use a regular directory)\n");
+    std::cout <<  "usage: " << progname << " -init <build> [-nodmg ]" << nl;
+    std::cout <<  nl;
+    std::cout <<  "  <build>       can be a standard build number or a path to a plist." << nl;
+    std::cout <<  "                supported user@host:/dir/file.plist," << nl;
+    std::cout <<  "                               http://host/dir/file.plist " << nl;
+    std::cout <<  "                              paths: /dir/file.plist, " << nl;
+    std::cout <<  "  -nodmg        do not use a sparse image for build root (use a regular directory)" << nl;
     exit(1);
 }
 
-void DarwinbuildInit(int argc, char *argv[]){
+static void DarwinbuildInit(int argc, char *argv[]){
     int ch;
     char *build = NULL;
     bool dmg = false;
@@ -120,15 +123,16 @@ void DarwinbuildInit(int argc, char *argv[]){
     margv += optind;
     // This is unecessary.
     if (margv[0] != NULL) {
-        fprintf(stdout, "Unexpected argument %s\n", margv[0]);
+        std::cout << "Unexpected argument " << margv[0] << nl;
         PrintInitHelp();
     }
     // If the arguments provided weren't for init, continue to next getopt
     if (build == NULL) {
         return;
     }
-    int modes = S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH;
     // Otherwise initialize the build and exit.
+    
+    int modes = S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH;
     
     if (checkDir("Roots")) {
         mkdir("Roots", modes);
@@ -149,61 +153,72 @@ void DarwinbuildInit(int argc, char *argv[]){
         mkdir(".build", modes);
     }
     
+    String filename = String(basename(build));
+    
+    if(checkFile(filename) == 0){
+        copyfile(filename, String(".build/") + filename , false);
+    }
+    else if (isURL(build)){
+        DownloadFile(build, String(".build/") + filename);
+    }
+//    else if (isSSH(build)){
+//
+//    }
     
     // TODO: Fnish init functionality
     
-    printf("Initializing darwinbuild\n");
+    std::cout << "Initializing darwinbuild" << nl;
     exit(0);
 }
 
 static void PrintUsage(){
-    fprintf(stdout, "Darwinbuild 1.0\n"); // TODO: Work on versioning
-    fprintf(stdout, "Copyright © 2021 The PureDarwin Project.\n");
-    fprintf(stdout, "This is free software; see the source for copying conditions.\n");
-    fprintf(stdout, "\n");
-    fprintf(stdout, "usage: %s -init <build> [-nodmg]\n", progname);
-    fprintf(stdout, "       %s [action] [options] <project> [<version>]\n", progname);
-    fprintf(stdout, "actions: [-help] [-headers] [-fetch] [-source] [-load] [-loadonly] [-group]\n");
-    fprintf(stdout, "options: [-build <build>] [-target <target>]\n"); // [-configuration=X]
-    fprintf(stdout, "         [-logdeps] [-nopatch] [-noload] [-nosource] [-codesign <identity>]\n");
-    fprintf(stdout, "         [-depsbuild X [-depsbuild Y]]\n");
-    fprintf(stdout, "\n");
-    fprintf(stdout, "Initialize Build:\n");
-    fprintf(stdout, " -init                   Initialize a build (check '%s -init help' for more info)\n", progname);
-    fprintf(stdout, "\n");
-    fprintf(stdout, "Actions:\n");
-    fprintf(stdout, " -headers                Do the installhdrs phase, instead of install.\n");
-    fprintf(stdout, " -fetch                  Only download necessary source and patch files.\n");
-    fprintf(stdout, " -source                 Extract, patch, and stage source.\n");
-    fprintf(stdout, " -load                   Populate the BuildRoot with one project.\n");
-    fprintf(stdout, " -loadonly               Only load dependencies into the build root, but don't build.\n");
-    fprintf(stdout, " -group                  Build all projects in the given darwinxref group.\n");
-    fprintf(stdout, "\n");
-    fprintf(stdout, "Options:\n");
-    fprintf(stdout, " -nosource               Do not fetch or stage source. This assumes that the.\n");
-    fprintf(stdout, "                         source is already in place in the BuildRoot.\n");
-    fprintf(stdout, " -logdeps                Do magic to log the build-time dependencies.\n");
-    fprintf(stdout, " -nopatch                Don't patch sources before building.\n");
-    fprintf(stdout, " -noload                 Don't load dependencies into the build root.\n");
-    fprintf(stdout, " -target <target>        The makefile or xcode target to build.\n");
-    fprintf(stdout, " -configuration <config> Specify the build configuration to use.\n");
-    fprintf(stdout, " -build <build>          Specify the darwin build number to buld, e.g. 8B15.\n");
-    fprintf(stdout, " -depsbuild <build>      Specify the darwin build number to populate the BuildRoot.\n");
-    fprintf(stdout, " -codesign <identity>    Sign the built root, using the given CODE_SIGN_IDENTITY value.\n");
-    fprintf(stdout, "\n");
-    fprintf(stdout, " Parameters:\n");
-    fprintf(stdout, "  <project> The name of the project to build\n");
-    fprintf(stdout, "  <version> If specified, the version of the project to build\n");
-    fprintf(stdout, "            this will default to the version associated with the\n");
-    fprintf(stdout, "            currently running build.\n");
+    std::cout << "Darwinbuild 1.0" << nl; // TODO: Work on versioning
+    std::cout << "Copyright © 2021 The PureDarwin Project." << nl;
+    std::cout << "This is free software; see the source for copying conditions." << nl;
+    std::cout << nl;
+    std::cout << "usage: " << progname << " -init <build> [-nodmg]" << nl;
+    std::cout << "       " << progname << " [action] [options] <project> [<version>]" << nl;
+    std::cout << "actions: [-help] [-headers] [-fetch] [-source] [-load] [-loadonly] [-group]" << nl;
+    std::cout << "options: [-build <build>] [-target <target>]" << nl; // [-configuration=;
+    std::cout << "         [-logdeps] [-nopatch] [-noload] [-nosource] [-codesign <identity>]" << nl;
+    std::cout << "         [-depsbuild X [-depsbuild Y]]" << nl;
+    std::cout << nl;
+    std::cout << "Initialize Build:" << nl;
+    std::cout << " -init                   Initialize a build (check '" << progname << " -init help' for more info)" << nl;
+    std::cout << nl;
+    std::cout << "Actions:" << nl;
+    std::cout << " -headers                Do the installhdrs phase, instead of install." << nl;
+    std::cout << " -fetch                  Only download necessary source and patch files." << nl;
+    std::cout << " -source                 Extract, patch, and stage source." << nl;
+    std::cout << " -load                   Populate the BuildRoot with one project." << nl;
+    std::cout << " -loadonly               Only load dependencies into the build root, but don't build." << nl;
+    std::cout << " -group                  Build all projects in the given darwinxref group." << nl;
+    std::cout << nl;
+    std::cout << "Options:" << nl;
+    std::cout << " -nosource               Do not fetch or stage source. This assumes that the." << nl;
+    std::cout << "                         source is already in place in the BuildRoot." << nl;
+    std::cout << " -logdeps                Do magic to log the build-time dependencies." << nl;
+    std::cout << " -nopatch                Don't patch sources before building." << nl;
+    std::cout << " -noload                 Don't load dependencies into the build root." << nl;
+    std::cout << " -target <target>        The makefile or xcode target to build." << nl;
+    std::cout << " -configuration <config> Specify the build configuration to use." << nl;
+    std::cout << " -build <build>          Specify the darwin build number to buld, e.g. 8B15." << nl;
+    std::cout << " -depsbuild <build>      Specify the darwin build number to populate the BuildRoot." << nl;
+    std::cout << " -codesign <identity>    Sign the built root, using the given CODE_SIGN_IDENTITY value." << nl;
+    std::cout << nl;
+    std::cout << " Parameters:" << nl;
+    std::cout << "  <project> The name of the project to build" << nl;
+    std::cout << "  <version> If specified, the version of the project to build" << nl;
+    std::cout << "            this will default to the version associated with the" << nl;
+    std::cout << "            currently running build." << nl;
     exit(1);
 }
 
 int main(int argc, char *argv[], char *env[]){
     actions_t actions = 0;
-    options_t options = {0};
-    char *project = NULL;
-    char *version = NULL;
+    options_t options;
+    String project;
+    String version;
     char ch;
     // set progrma name
     progname = basename(argv[0]);
@@ -261,20 +276,20 @@ int main(int argc, char *argv[], char *env[]){
                 options.noload = true;
                 break;
             case 0xb  :
-                options.build = optarg;
+                options.build = String(optarg);
                 break;
             case 0xc  :
-                options.logdeps = optarg;
+                options.logdeps = String(optarg);
                 break;
             case 0xd  :
-                options.depsbuild = optarg;
+                options.depsbuild = String(optarg);
                 printf("Not supported yet"); exit(0);
 //                break;
             case 0xe  :
-                options.target = optarg;
+                options.target = String(optarg);
                 break;
             case 0xf  :
-                options.codesign = optarg;
+                options.codesign = String(optarg);
                 break;
             case 0x10 :
                 printf("Not supported yet");
@@ -288,7 +303,7 @@ int main(int argc, char *argv[], char *env[]){
     argv += optind;
 
     if (argc < 1){
-        fprintf(stdout, "Did not specify what project to build");
+        std::cerr << "Did not specify what project to build";
         PrintUsage();
     }
     // set the project
@@ -298,7 +313,7 @@ int main(int argc, char *argv[], char *env[]){
         version = argv[1];
     }
     
-    printf("Building Project %s with actions %x\n", project, actions);
+    std::cout << "Building Project " << project << " with actions " << actions << nl;
     
 
     return 0;

@@ -108,6 +108,16 @@
 		3963011A1EAB4D60006081C7 /* source_sites.c in Sources */ = {isa = PBXBuildFile; fileRef = 72C86C0E10965EEA00C66E90 /* source_sites.c */; };
 		396301211EAB4E01006081C7 /* patch_sites.c in Sources */ = {isa = PBXBuildFile; fileRef = 396301191EAB42B6006081C7 /* patch_sites.c */; };
 		396301291EAB5DBC006081C7 /* patch_sites.tcl in CopyFiles */ = {isa = PBXBuildFile; fileRef = 396301281EAB5DB5006081C7 /* patch_sites.tcl */; };
+		52C9DB6E25C5D3510054F0A3 /* stdlib.cc in Sources */ = {isa = PBXBuildFile; fileRef = 52C9DB6C25C5D3490054F0A3 /* stdlib.cc */; };
+		52C9DB7125C5D5A30054F0A3 /* xref.cc in Sources */ = {isa = PBXBuildFile; fileRef = 52C9DB6F25C5D5910054F0A3 /* xref.cc */; };
+		52C9DB8625C627C70054F0A3 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F8B4BA724EB74DC00CC07E5 /* CoreFoundation.framework */; };
+		52C9DB8725C6288B0054F0A3 /* DBPlugin.c in Sources */ = {isa = PBXBuildFile; fileRef = 72C86BEC10965E7500C66E90 /* DBPlugin.c */; };
+		52C9DB8825C6288D0054F0A3 /* DBDataStore.c in Sources */ = {isa = PBXBuildFile; fileRef = 72C86BEA10965E7500C66E90 /* DBDataStore.c */; };
+		52C9DB8925C628900054F0A3 /* cfutils.c in Sources */ = {isa = PBXBuildFile; fileRef = 72C86BE810965E7500C66E90 /* cfutils.c */; };
+		52C9DB8B25C629210054F0A3 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F7298EA24D759FF0006E19E /* libsqlite3.tbd */; };
+		52C9DB8F25C62A630054F0A3 /* Tcl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52C9DB8E25C62A630054F0A3 /* Tcl.framework */; };
+		52C9DB9025C62A850054F0A3 /* DBTclPlugin.c in Sources */ = {isa = PBXBuildFile; fileRef = 72C86BEF10965E7500C66E90 /* DBTclPlugin.c */; };
+		52C9DB9225C683700054F0A3 /* libcurl.4.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 52C9DB9125C683700054F0A3 /* libcurl.4.tbd */; };
 		61E0A6BD10A8DCC700DA7EBC /* exportIndex.c in Sources */ = {isa = PBXBuildFile; fileRef = 72C86BFF10965EEA00C66E90 /* exportIndex.c */; };
 		720BE2F4120C90C500B3C4A5 /* digest.c in Sources */ = {isa = PBXBuildFile; fileRef = 720BE2E9120C909E00B3C4A5 /* digest.c */; };
 		7227AB41109897D500BE33D7 /* binary_sites.tcl in CopyFiles */ = {isa = PBXBuildFile; fileRef = 72C86BF310965EEA00C66E90 /* binary_sites.tcl */; };
@@ -152,7 +162,7 @@
 		72C86C68109663D300C66E90 /* darwintrace.c in Sources */ = {isa = PBXBuildFile; fileRef = 72C86BD910965E0A00C66E90 /* darwintrace.c */; };
 		72D05CB811D2680500B33EDD /* query.c in Sources */ = {isa = PBXBuildFile; fileRef = 72D05CA911D2678F00B33EDD /* query.c */; };
 		F5F236BB25C4939200FCC7BC /* receipts.c in Sources */ = {isa = PBXBuildFile; fileRef = F5F236BA25C4939200FCC7BC /* receipts.c */; };
-		F5F236BE25C493C500FCC7BC /* darwinbuild.c in Sources */ = {isa = PBXBuildFile; fileRef = F5F236BC25C493C400FCC7BC /* darwinbuild.c */; };
+		F5F236BE25C493C500FCC7BC /* darwinbuild.cc in Sources */ = {isa = PBXBuildFile; fileRef = F5F236BC25C493C400FCC7BC /* darwinbuild.cc */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -676,6 +686,11 @@
 		396301191EAB42B6006081C7 /* patch_sites.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = patch_sites.c; sourceTree = "<group>"; };
 		396301271EAB4E01006081C7 /* patch_sites.so */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.objfile"; includeInIndex = 0; path = patch_sites.so; sourceTree = BUILT_PRODUCTS_DIR; };
 		396301281EAB5DB5006081C7 /* patch_sites.tcl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = patch_sites.tcl; sourceTree = "<group>"; };
+		52C9DB6C25C5D3490054F0A3 /* stdlib.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = stdlib.cc; path = darwinbuild/stdlib.cc; sourceTree = "<group>"; };
+		52C9DB6F25C5D5910054F0A3 /* xref.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xref.cc; path = darwinbuild/xref.cc; sourceTree = "<group>"; };
+		52C9DB8C25C62A430054F0A3 /* Tcl */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = Tcl; path = ../../../../../System/Library/Frameworks/Tcl.framework/Versions/8.5/Tcl; sourceTree = "<group>"; };
+		52C9DB8E25C62A630054F0A3 /* Tcl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Tcl.framework; path = ../../../../../System/Library/Frameworks/Tcl.framework; sourceTree = "<group>"; };
+		52C9DB9125C683700054F0A3 /* libcurl.4.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libcurl.4.tbd; path = usr/lib/libcurl.4.tbd; sourceTree = SDKROOT; };
 		720BE2E9120C909E00B3C4A5 /* digest.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = digest.c; path = darwinbuild/digest.c; sourceTree = "<group>"; };
 		720BE2F2120C90A700B3C4A5 /* digest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = digest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7227AB6D10989A9900BE33D7 /* manifest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = manifest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -768,8 +783,8 @@
 		DF6BE304132C5EBD00793781 /* run-tests.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "run-tests.sh"; sourceTree = "<group>"; };
 		DF6BE31F132C5EBD00793781 /* run-all-tests.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "run-all-tests.sh"; sourceTree = "<group>"; };
 		F5F236BA25C4939200FCC7BC /* receipts.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = receipts.c; path = darwinbuild/receipts.c; sourceTree = "<group>"; };
-		F5F236BC25C493C400FCC7BC /* darwinbuild.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = darwinbuild.c; path = darwinbuild/darwinbuild.c; sourceTree = "<group>"; };
-		F5F236BD25C493C400FCC7BC /* darwinbuild.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = darwinbuild.h; path = darwinbuild/darwinbuild.h; sourceTree = "<group>"; };
+		F5F236BC25C493C400FCC7BC /* darwinbuild.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = darwinbuild.cc; path = darwinbuild/darwinbuild.cc; sourceTree = "<group>"; };
+		F5F236BD25C493C400FCC7BC /* darwinbuild.h.in */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = darwinbuild.h.in; path = darwinbuild/darwinbuild.h.in; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -801,6 +816,17 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		52C9DB8525C627C00054F0A3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				52C9DB9225C683700054F0A3 /* libcurl.4.tbd in Frameworks */,
+				52C9DB8F25C62A630054F0A3 /* Tcl.framework in Frameworks */,
+				52C9DB8B25C629210054F0A3 /* libsqlite3.tbd in Frameworks */,
+				52C9DB8625C627C70054F0A3 /* CoreFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1009,6 +1035,9 @@
 		1F7298E924D759FF0006E19E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				52C9DB9125C683700054F0A3 /* libcurl.4.tbd */,
+				52C9DB8E25C62A630054F0A3 /* Tcl.framework */,
+				52C9DB8C25C62A430054F0A3 /* Tcl */,
 				1F8B4BA724EB74DC00CC07E5 /* CoreFoundation.framework */,
 				1F7298EA24D759FF0006E19E /* libsqlite3.tbd */,
 			);
@@ -1081,8 +1110,10 @@
 		72C86BD510965DC900C66E90 /* darwinbuild */ = {
 			isa = PBXGroup;
 			children = (
-				F5F236BD25C493C400FCC7BC /* darwinbuild.h */,
-				F5F236BC25C493C400FCC7BC /* darwinbuild.c */,
+				F5F236BD25C493C400FCC7BC /* darwinbuild.h.in */,
+				F5F236BC25C493C400FCC7BC /* darwinbuild.cc */,
+				52C9DB6C25C5D3490054F0A3 /* stdlib.cc */,
+				52C9DB6F25C5D5910054F0A3 /* xref.cc */,
 				F5F236BA25C4939200FCC7BC /* receipts.c */,
 				720BE2E9120C909E00B3C4A5 /* digest.c */,
 				7227AB871098A7BF00BE33D7 /* buildlist */,
@@ -1826,9 +1857,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 72C86C3D1096607A00C66E90 /* Build configuration list for PBXNativeTarget "darwinbuild" */;
 			buildPhases = (
-				F5F236B825C4923300FCC7BC /* Sources */,
 				7227AB8F1098A89700BE33D7 /* Run Script */,
-				7227ABE61098D5E400BE33D7 /* Run Script */,
+				F5F236B825C4923300FCC7BC /* Sources */,
+				52C9DB8525C627C00054F0A3 /* Frameworks */,
 				1F06C5B52023EB1D003EBE6C /* ShellScript */,
 			);
 			buildRules = (
@@ -1988,7 +2019,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "mkdir -p $DSTROOT/usr/local/bin\n/bin/cp $BUILT_PRODUCTS_DIR/darwinmaster $DSTROOT/usr/local/bin/darwinmaster";
+			shellScript = "mkdir -p $DSTROOT/usr/local/bin\n/bin/cp $BUILT_PRODUCTS_DIR/darwinmaster $DSTROOT/usr/local/bin/darwinmaster\n";
 			showEnvVarsInLog = 0;
 		};
 		1F71A4FF2030F81C00020E2F /* ShellScript */ = {
@@ -2046,35 +2077,19 @@
 		};
 		7227AB8F1098A89700BE33D7 /* Run Script */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 12;
 			files = (
 			);
 			inputPaths = (
-				"$(SRCROOT)/darwinbuild/darwinbuild.in",
+				"$(SRCROOT)/darwinbuild/darwinbuild.h.in",
 			);
 			name = "Run Script";
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/darwinbuild",
+				"$(SRCROOT)/darwinbuild.h",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/bin/sed -e \"s,%%PREFIX%%,$PREFIX,\" $SRCROOT/darwinbuild/darwinbuild.h > $DERIVED_FILE_DIR/darwinbuild\n\n/bin/chmod 755 $DERIVED_FILE_DIR/darwinbuild\n\n";
-		};
-		7227ABE61098D5E400BE33D7 /* Run Script */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"$(DERIVED_FILE_DIR)/darwinbuild",
-			);
-			name = "Run Script";
-			outputPaths = (
-				"$(BUILT_PRODUCTS_DIR)/darwinbuild",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "/bin/cp $DERIVED_FILE_DIR/darwinbuild $BUILT_PRODUCTS_DIR/darwinbuild\n";
+			shellScript = "/usr/bin/sed -e \"s,%%PREFIX%%,$PREFIX,\" $SRCROOT/darwinbuild/darwinbuild.h.in > $SRCROOT/darwinbuild/darwinbuild.h\n";
 		};
 		7227AC001098D78C00BE33D7 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2104,7 +2119,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/bin/cp $DERIVED_FILE_DIR/darwinmaster $BUILT_PRODUCTS_DIR/darwinmaster";
+			shellScript = "/bin/cp $DERIVED_FILE_DIR/darwinmaster $BUILT_PRODUCTS_DIR/darwinmaster\n";
 		};
 		7227AC0D1098D84600BE33D7 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2437,7 +2452,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F5F236BE25C493C500FCC7BC /* darwinbuild.c in Sources */,
+				52C9DB7125C5D5A30054F0A3 /* xref.cc in Sources */,
+				F5F236BE25C493C500FCC7BC /* darwinbuild.cc in Sources */,
+				52C9DB6E25C5D3510054F0A3 /* stdlib.cc in Sources */,
+				52C9DB8925C628900054F0A3 /* cfutils.c in Sources */,
+				52C9DB8725C6288B0054F0A3 /* DBPlugin.c in Sources */,
+				52C9DB8825C6288D0054F0A3 /* DBDataStore.c in Sources */,
+				52C9DB9025C62A850054F0A3 /* DBTclPlugin.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3706,10 +3727,22 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 7227AB9C1098AAE100BE33D7 /* prefix.xcconfig */;
 			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_IDENTITY = "-";
+				GCC_OPTIMIZATION_LEVEL = 0;
 				INSTALL_PATH = "$(BINDIR)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SYSTEM_LIBRARY_DIR)/Frameworks/Tcl.framework/Versions/8.5",
+				);
+				OTHER_CFLAGS = (
+					"-DHAVE_TCL_PLUGINS=1",
+					"-DDEFAULT_PLUGIN_PATH=\\\"$(DATDIR)/darwinxref/plugins\\\"",
+					"-DDEFAULT_DB_FILE=\\\".build/xref.db\\\"",
+				);
 				PRODUCT_NAME = darwinbuild;
+				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
@@ -3717,10 +3750,22 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 7227AB9C1098AAE100BE33D7 /* prefix.xcconfig */;
 			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_IDENTITY = "-";
+				GCC_OPTIMIZATION_LEVEL = z;
 				INSTALL_PATH = "$(BINDIR)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SYSTEM_LIBRARY_DIR)/Frameworks/Tcl.framework/Versions/8.5",
+				);
+				OTHER_CFLAGS = (
+					"-DHAVE_TCL_PLUGINS=1",
+					"-DDEFAULT_PLUGIN_PATH=\\\"$(DATDIR)/darwinxref/plugins\\\"",
+					"-DDEFAULT_DB_FILE=\\\".build/xref.db\\\"",
+				);
 				PRODUCT_NAME = darwinbuild;
+				SDKROOT = macosx;
 			};
 			name = Release;
 		};

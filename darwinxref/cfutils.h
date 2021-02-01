@@ -35,6 +35,10 @@
 
 #include <CoreFoundation/CoreFoundation.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 CFPropertyListRef read_plist(char* path);
 char* strdup_cfstr(CFStringRef str);
 CFStringRef cfstr(const char* str);
@@ -48,5 +52,9 @@ void arrayAppendArrayDistinct(CFMutableArrayRef array, CFArrayRef other);
 extern CFArrayCallBacks cfArrayCStringCallBacks;
 extern CFDictionaryKeyCallBacks cfDictionaryCStringKeyCallBacks;
 extern CFDictionaryValueCallBacks cfDictionaryCStringValueCallBacks;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // __cfutils_h__

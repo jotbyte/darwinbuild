@@ -503,7 +503,7 @@ if [ "$nosource" != "YES" ]; then
 	###
 	### Install the sources and patches into the BuildRoot
 	###
-	cd "$SRCROOT/.."
+	cd "$SRCROOT/.." || exit
 	echo "*** Copying Sources ..."
 	if [ -d "$SourceCache/$project" ]; then
 		tar c -C "$SourceCache" "$project" | tar xf -

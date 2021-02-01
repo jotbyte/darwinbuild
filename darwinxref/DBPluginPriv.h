@@ -32,6 +32,10 @@
 
 #include "DBPlugin.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /*!
 	@typedef DBPlugin
 	Basic plugin data structure returned by plugin's initialize function.
@@ -89,3 +93,6 @@ void DBSetCurrentBuild(char* build);
 
 void print_usage(char* progname, int argc, char* argv[]);
 
+#ifdef __cplusplus
+}
+#endif

@@ -12,14 +12,14 @@
 #include <cstdio>
 #include <string>
 
-#define PREFIX              "%%PREFIX%%"
+#define PREFIX              "/usr/local"
 #define PWDP                "PWD"
 #define XREFDB              ".build/xref.db"
 #define DMGFILE             ".build/buildroot.sparsebundle"
-#define DARWINXREF          "%%PREFIX%%/bin/darwinxref"
-#define DATADIR             "%%PREFIX%%/share/darwinbuild/"
-#define DIGEST              "%%PREFIX%%/share/darwinbuild/digest"
-#define DARWINTRACE         "%%PREFIX%%/share/darwinbuild/darwintrace.dylib"
+#define DARWINXREF          "/usr/local/bin/darwinxref"
+#define DATADIR             "/usr/local/share/darwinbuild/"
+#define DIGEST              "/usr/local/share/darwinbuild/digest"
+#define DARWINTRACE         "/usr/local/share/darwinbuild/darwintrace.dylib"
 #define DITTO               "ditto"
 #define DEFAULTPLISTSIT    ""
 #define DARWINBUILD_ROOT    PWDP

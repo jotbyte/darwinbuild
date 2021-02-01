@@ -35,6 +35,10 @@
 
 #include "sqlite3.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 int    SQL(const char* fmt, ...);
 int    SQL_BOOLEAN(const char* fmt, ...);
 int    SQL_CALLBACK(sqlite3_callback callback, void* context, const char* fmt, ...);
@@ -42,5 +46,9 @@ void   SQL_NOERR(char* sql);
 char*  SQL_STRING(const char* fmt, ...);
 
 void* _DBPluginGetDataStorePtr(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

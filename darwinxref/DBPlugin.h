@@ -35,6 +35,10 @@
 
 #include <CoreFoundation/CoreFoundation.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct DBPlugin DBPlugin;
 
 /*!
@@ -193,5 +197,9 @@ int DBCommitTransaction(void);
 int DBRollbackTransaction(void);
 
 #include "cfutils.h"
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

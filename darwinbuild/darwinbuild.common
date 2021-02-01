@@ -92,7 +92,7 @@ CURLARGS=${CURLARGS:-}
 ###
 ### Download a .tar.gz file
 ###
-function Download() {
+Download() {
 	local destination="$1"
 	local filename="$2"
 	local master_sites="$3"
