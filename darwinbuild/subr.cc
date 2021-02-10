@@ -15,8 +15,10 @@
 #include <filesystem>
 #include <experimental/filesystem>
 #include <regex>
+#include <spawn.h>
 
 #include <fcntl.h>
+#include <unistd.h>
 #include <sys/stat.h>
 #include <curl/curl.h>
 
@@ -24,35 +26,39 @@
 
 namespace fs = std::filesystem;
 
-int checkDir(std::string dir){
+int checkDir(std::string dir, bool silent){
     fs::path dpath(dir);
-
-    if (fs::exists(dpath)){
+    std::error_code err;
+    if (fs::exists(dpath, err)){
         if (fs::is_directory(dpath)) {
             return 0;
         } else {
-            std::cerr << dir << " is not a directory\n" << std::endl;
-            return ENOENT;
+            if(!silent)
+                std::cerr << dir << " is not a directory\n" << std::endl;
+            return ENOTDIR;
         }
     } else {
-        std::cerr << "Directory \'" << dir << "\' doesn't exist" << strerror(errno) << std::endl;
-        return errno;
+        if(!silent)
+            std::cerr << "Directory \'" << dir << "\' doesn't exist" << strerror(errno) << std::endl;
+        return ENOENT;
     }
 }
 
-int checkFile(std::string file){
+int checkfile(std::string file, bool silent){
     fs::path fpath(file);
-
-    if (fs::exists(fpath)){
+    std::error_code err;
+    if (fs::exists(fpath, err)){
         if (fs::is_regular_file(fpath)) {
             return 0;
         } else {
-            std::cerr << "The file '" << file << "' is not supported\n" << std::endl;
-            return ENOENT;
+            if(!silent)
+                std::cerr << "The file '" << file << "' is not supported\n" << std::endl;
+            return ENOTSUP;
         }
     } else {
-        std::cerr << "unable to open file \'" << file << "\' " << strerror(errno) << std::endl;
-        return errno;
+        if(!silent)
+            std::cerr << "unable to open file \'" << file << "\' " << strerror(errno) << std::endl;
+        return ENOENT;
     }
 }
 
@@ -62,7 +68,7 @@ int readFile(std::string path, char *out){
     char *data;
     int ret;
     
-    if((ret = checkFile(path)) != 0)
+    if((ret = checkfile(path, false)) != 0)
         return -1;
     
     file.open(path, std::ios::in | std::ios::ate);
@@ -71,23 +77,18 @@ int readFile(std::string path, char *out){
     file.seekg (0, std::ios::beg);
     len = (len - file.tellg());
     
-    data = new char[1000];
-    file.read(data, 1000);
+    data = new char[len];
+    file.read(data, len);
     file.close();
-    
-    data[len] = 0;
-    if (data[len-1] == '\n')
-        data[len-1] = 0;
     
     out = data;
     return (int)len;
 }
 
 int copyfile(std::string src, std::string dest, bool replace){
-//    fs::copy_options opts;
-//    opts
-//    fs::copy(<#const path &__from#>, <#const path &__to#>, <#copy_options __opt#>, <#error_code &__ec#>)
-    return 0;
+    std::error_code err;
+    fs::copy(src, dest, replace ? fs::copy_options::overwrite_existing : fs::copy_options::skip_existing, err);
+    return err.value();
 }
 
 bool isURL(std::string str){
@@ -142,4 +143,9 @@ int newDir(std::string dir){
                     fs::perms::group_read);
     }
     return err.value();
+}
+
+void symlink(std::string src, std::string dest){
+    if(!fs::exists(dest))
+        fs::create_symlink(src, dest);
 }

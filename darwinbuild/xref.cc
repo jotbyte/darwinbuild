@@ -7,22 +7,31 @@
 //
 
 #include <cstdio>
-#include <dlfcn.h>
 #include <string>
+#include <filesystem>
+
+#include <dlfcn.h>
 #include <CoreFoundation/CoreFoundation.h>
 
 #include "DBPlugin.h"
 #include "DBPluginPriv.h"
 #include "darwinbuild.h"
+#include "xref.h"
 
-int Xref(){
-    std::string dbfile = std::string(getenv("DARWINXREF_DB_FILE"));
-    std::string build = std::string(getenv("DARWINBUILD_BUILD"));
-    std::string plugins = std::string(getenv("DARWINXREF_PLUGIN_PATH"));
+namespace fs = std::filesystem;
+
+int Xref(std::string build){
     int ret = 0;
+    std::string dbfile;
+    std::string plugins;
+    char *c_dbfile = getenv("DARWINXREF_DB_FILE");
+    char *c_plugins = getenv("DARWINXREF_PLUGIN_PATH");
+    char *argv[] = {(char*)("loadIndex"), (char*)std::string(".build/" + build + ".plist").c_str()};
     
-    if (dbfile.empty()) dbfile = std::string(DEFAULT_DB_FILE);
-    if (plugins.empty()) plugins = DEFAULT_PLUGIN_PATH;
+    if (c_dbfile != NULL)  dbfile = c_dbfile;
+    else  dbfile = DEFAULT_DB_FILE;
+    if (c_plugins != NULL) plugins = c_plugins;
+    else  plugins = DEFAULT_PLUGIN_PATH;
     
     if (build.empty())
         ret = readFile(".build/build", (char*)build.c_str());
@@ -40,6 +49,16 @@ int Xref(){
     
     DBDataStoreInitialize(dbfile.c_str());
     DBSetCurrentBuild((char*)build.c_str());
+    
+    if (DBPluginLoadPlugins(plugins.c_str()) == -1) {
+            fprintf(stderr, "Error: cannot load plugins!\n");
+        exit(2);
+    }
+    
+    if (run_plugin(2, argv) == -1) {
+        print_usage(progname, 3, argv);
+        exit(1);
+    }
     
     return 0;
 }

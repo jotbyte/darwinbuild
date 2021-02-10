@@ -64,12 +64,12 @@
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "-init /usr/local/PD19_0.plist"
-            isEnabled = "NO">
+            argument = "-init /Users/john/Desktop/PD19_0.plist"
+            isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "-h"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "-init /usr/local/PD19_0.plist -nodmg"

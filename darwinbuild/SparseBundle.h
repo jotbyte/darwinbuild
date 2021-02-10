@@ -10,7 +10,12 @@
 #define SparseBundle_h
 
 #include <cstdio>
+#include <string>
+#include <CoreFoundation/CoreFoundation.h>
 
+// Switch to PlistCPP
+static const CFStringRef kBandSizeKey = CFSTR("band-size");
+static const CFStringRef kDevSizeKey = CFSTR("size");
 static std::string plist =
 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
 "<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">\n"
@@ -31,11 +36,11 @@ static std::string plist =
 
 class SparseBundle {
     std::string path;
-    uint64_t bandSize;
-    uint64_t size;
+//    uint64_t bandSize;
+//    uint64_t size;
     
 public:
-    <#member functions#>
+    
 };
 
 #endif /* SparseBundle_h */

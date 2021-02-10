@@ -24,13 +24,13 @@
 #define DEFAULTPLISTSIT    ""
 #define DARWINBUILD_ROOT    PWDP
 
-extern std::string progname;
+extern char *progname;
 
-int checkDir(std::string dir);
-int checkDir(std::string dir);
-int checkFile(std::string file);
+int checkDir(std::string dir, bool silent);
+int checkfile(std::string file, bool silent);
 int readFile(std::string path, char *out);
 int copyfile(std::string src, std::string dest, bool replace);
+void symlink(std::string src, std::string dest);
 
 bool isURL(std::string str);
 bool isSSH(std::string str);

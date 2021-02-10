@@ -164,7 +164,7 @@ if [ "$1" == "-init" ]; then
 	### Download the build's plist and its parents
 	###
 	while [ "$build" != "" ]; do
-		Download .build "$build".plist "$sites ${DEFAULTPLISTSITE}"
+		Download .build "${build}.plist" "$sites ${DEFAULTPLISTSITE}"
 		$DARWINXREF "-f$XREFDB" "-b$build" loadIndex .build/"$build".plist
 		sites=$($DARWINXREF "-f$XREFDB" "-b$build" plist_sites | xargs echo)
 		build=$($DARWINXREF "-f$XREFDB" "-b$build" inherits)

@@ -38,6 +38,7 @@
 #include <cstdlib>
 #include <cstdbool>
 #include <iostream>
+#include <vector>
 
 #include <libgen.h>
 #include <getopt.h>
@@ -45,11 +46,12 @@
 #include <curl/curl.h>
 
 #include "darwinbuild.h"
+#include "init.h"
 
 #define nl std::endl
 typedef std::string String;
 
-String progname = String("(null)");
+char *progname = nullptr;
 
 enum {
     ACTION_HEADERS = 0x1,
@@ -66,14 +68,16 @@ typedef struct options {
     bool nosource;
     bool nopatch;
     bool noload;
+    init_options_t init;
     // string args
-//    char configuration[255];
+//    char configuration[256];
     String build;
     String logdeps;
     String depsbuild;
     String codesign;
     String target;
 } options_t;
+
 
 static void PrintInitHelp(){
     std::cout <<  "usage: " << progname << " -init <build> [-nodmg ]" << nl;
@@ -86,98 +90,6 @@ static void PrintInitHelp(){
     exit(1);
 }
 
-static void DarwinbuildInit(int argc, char *argv[]){
-    int ch;
-    char *build = NULL;
-    bool nodmg = false;
-    char **margv = argv; // preserve argv
-    struct option arg_options[] = {
-        { "init",           required_argument,  0, 0x30 },
-        { "nodmg",          no_argument,        0, 0x40 },
-        { NULL, 0, 0, 0 }
-    };
-    
-    opterr = 0; // ignore later getopt options if we're not initalizing anything.
-    // it'll just skip over this loop like this function never happened.
-    while ((ch = getopt_long_only(argc, margv, "", arg_options, NULL)) != (-1)) {
-        switch (ch) {
-            case 0x30:
-                build = optarg;
-                if (!strncmp("help", build, sizeof("help"))) {
-                    PrintInitHelp();
-                }
-                break;
-            case 0x40:
-                if(build == NULL) PrintInitHelp(); // -nodmg shouldn't be used alone
-                nodmg = true;
-                break;
-            default:
-                if(build){ // if there's some unexpected argument, abort.
-                    PrintInitHelp();
-                }
-                break;
-        }
-    }
-    opterr = 1; // reset errors for later getopt
-    
-    margv += optind;
-    // This is unecessary.
-    if (margv[0] != NULL) {
-        std::cout << "Unexpected argument " << margv[0] << nl;
-        PrintInitHelp();
-    }
-    // If the arguments provided weren't for init, continue to next getopt
-    if (build == NULL) {
-        return;
-    }
-    // Otherwise initialize the build and exit.
-    
-    String filename = String(basename(build));
-    String pdBuild = filename.substr(0, filename.length() + 1 - sizeof(".plist"));
-        
-    if (checkDir("Roots")) {
-        newDir("Roots");
-    }
-    if (checkDir("Sources")) {
-        newDir("Sources");
-    }
-    if (checkDir("Symbols")) {
-        newDir("Symbols");
-    }
-    if (checkDir("Headers")) {
-        newDir("Headers");
-    }
-    if (checkDir("Logs")) {
-        newDir("Logs");
-    }
-    if (checkDir(".build")) {
-        newDir(".build");
-    }
-    
-    
-    if(checkFile(filename) == 0){
-        copyfile(filename, String(".build/") + filename , false);
-    }
-    else if (isURL(build)){
-        DownloadFile(build, String(".build/") + filename);
-    }
-    else if (isSSH(build)){
-        std::cout << "SSH files not supported yet" << nl;
-        exit(0);
-    }
-    
-    // TODO: Fnish init functionality
-    if (nodmg) {
-        newDir("BuildRoot");
-    } else { // create DMG
-        std::string dmgfile = String("BuildRoot_") + pdBuild;
-        
-    }
-    
-    std::cout << "Initializing darwinbuild" << nl;
-    exit(0);
-}
-
 static void PrintUsage(){
     std::cout << "Darwinbuild 1.0" << nl; // TODO: Work on versioning
     std::cout << "Copyright © 2021 The PureDarwin Project." << nl;
@@ -185,10 +97,10 @@ static void PrintUsage(){
     std::cout << nl;
     std::cout << "usage: " << progname << " -init <build> [-nodmg]" << nl;
     std::cout << "       " << progname << " [action] [options] <project> [<version>]" << nl;
-    std::cout << "actions: [-help] [-headers] [-fetch] [-source] [-load] [-loadonly] [-group]" << nl;
-    std::cout << "options: [-build <build>] [-target <target>]" << nl; // [-configuration=;
-    std::cout << "         [-logdeps] [-nopatch] [-noload] [-nosource] [-codesign <identity>]" << nl;
-    std::cout << "         [-depsbuild X [-depsbuild Y]]" << nl;
+    std::cout << "  actions: [-help] [-headers] [-fetch] [-source] [-load] [-loadonly] [-group]" << nl;
+    std::cout << "  options: [-build <build>] [-target <target>]" << nl; // [-configuration=;
+    std::cout << "           [-logdeps] [-nopatch] [-noload] [-nosource] [-codesign <identity>]" << nl;
+    std::cout << "           [-depsbuild X [-depsbuild Y]]" << nl;
     std::cout << nl;
     std::cout << "Initialize Build:" << nl;
     std::cout << " -init                   Initialize a build (check '" << progname << " -init help' for more info)" << nl;
@@ -230,10 +142,10 @@ int main(int argc, char *argv[], char *env[]){
     // set progrma name
     progname = basename(argv[0]);
     
-    DarwinbuildInit(argc, argv);
-    
     // In the future maybe add a 'world' option to build the whole OS.
     struct option arg_options[] = {
+        { "init",           required_argument,  0, 'i'  },
+        { "nodmg",          no_argument,        0, 'd'  },
         { "headers",        no_argument,        0, 0x1  },
 		{ "fetch",          no_argument,        0, 0x2  },
 		{ "source",         no_argument,        0, 0x3  },
@@ -255,6 +167,22 @@ int main(int argc, char *argv[], char *env[]){
 
     while ((ch = getopt_long_only(argc, argv, "h", arg_options, NULL)) != (-1)) {
 		switch (ch) {
+            case 'i':
+                options.init.initialize = true;
+                options.init.dmg = true;
+                options.init.build = optarg;
+                if (!strncmp("help", options.init.build.c_str(), sizeof("help")) || actions != 0 || argc > 4 ) {
+                    PrintInitHelp();
+                }
+                break;
+            case 'd':
+                if (options.init.initialize != true) {
+                    std::cerr << "-nodmg can only be specified with -init" << nl;
+                    std::cerr << "see '" << progname << " -init help' for more info" << nl;
+                    return EINVAL;
+                }
+                options.init.dmg = false;
+                break;
             case 0x1  :
                 actions |= ACTION_HEADERS;
                 break;
@@ -308,9 +236,26 @@ int main(int argc, char *argv[], char *env[]){
 
     argc -= optind;
     argv += optind;
+    
+    // Check if darwinbuild -init was called
+    if (options.init.initialize) {
+        DarwinbuildInit(options.init);
+    } else {
+        // check if we're initialized
+        if (checkDir("Roots", true) ||
+            checkDir("Sources", true) ||
+            checkDir("Symbols", true) ||
+            checkDir("Headers", true) ||
+            checkDir("Logs", true) ||
+            checkDir(".build", true))
+        {
+            std::cout << "Darwinbuild is not initalized in this directory" << nl;
+            exit(ENOTSUP);
+        }
+    }
 
     if (argc < 1){
-        std::cerr << "Did not specify what project to build";
+        std::cerr << "Did not specify what project to build" << nl;
         PrintUsage();
     }
     // set the project

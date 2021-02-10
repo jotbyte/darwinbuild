@@ -108,6 +108,7 @@
 		3963011A1EAB4D60006081C7 /* source_sites.c in Sources */ = {isa = PBXBuildFile; fileRef = 72C86C0E10965EEA00C66E90 /* source_sites.c */; };
 		396301211EAB4E01006081C7 /* patch_sites.c in Sources */ = {isa = PBXBuildFile; fileRef = 396301191EAB42B6006081C7 /* patch_sites.c */; };
 		396301291EAB5DBC006081C7 /* patch_sites.tcl in CopyFiles */ = {isa = PBXBuildFile; fileRef = 396301281EAB5DB5006081C7 /* patch_sites.tcl */; };
+		522460B325CA027300573EF4 /* init.cc in Sources */ = {isa = PBXBuildFile; fileRef = 522460B125CA026200573EF4 /* init.cc */; };
 		52C9DB6E25C5D3510054F0A3 /* subr.cc in Sources */ = {isa = PBXBuildFile; fileRef = 52C9DB6C25C5D3490054F0A3 /* subr.cc */; };
 		52C9DB7125C5D5A30054F0A3 /* xref.cc in Sources */ = {isa = PBXBuildFile; fileRef = 52C9DB6F25C5D5910054F0A3 /* xref.cc */; };
 		52C9DB8625C627C70054F0A3 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F8B4BA724EB74DC00CC07E5 /* CoreFoundation.framework */; };
@@ -687,6 +688,9 @@
 		396301191EAB42B6006081C7 /* patch_sites.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = patch_sites.c; sourceTree = "<group>"; };
 		396301271EAB4E01006081C7 /* patch_sites.so */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.objfile"; includeInIndex = 0; path = patch_sites.so; sourceTree = BUILT_PRODUCTS_DIR; };
 		396301281EAB5DB5006081C7 /* patch_sites.tcl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = patch_sites.tcl; sourceTree = "<group>"; };
+		522460B125CA026200573EF4 /* init.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = init.cc; path = darwinbuild/init.cc; sourceTree = "<group>"; };
+		5272D09425D37D1B00ADF489 /* init.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = init.h; path = darwinbuild/init.h; sourceTree = "<group>"; };
+		5272D09525D3867300ADF489 /* xref.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = xref.h; path = darwinbuild/xref.h; sourceTree = "<group>"; };
 		52C9DB6C25C5D3490054F0A3 /* subr.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = subr.cc; path = darwinbuild/subr.cc; sourceTree = "<group>"; };
 		52C9DB6F25C5D5910054F0A3 /* xref.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xref.cc; path = darwinbuild/xref.cc; sourceTree = "<group>"; };
 		52C9DB8C25C62A430054F0A3 /* Tcl */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = Tcl; path = ../../../../../System/Library/Frameworks/Tcl.framework/Versions/8.5/Tcl; sourceTree = "<group>"; };
@@ -1115,10 +1119,13 @@
 			children = (
 				F5F236BD25C493C400FCC7BC /* darwinbuild.h.in */,
 				F5F236BC25C493C400FCC7BC /* darwinbuild.cc */,
+				52C9DB6C25C5D3490054F0A3 /* subr.cc */,
+				5272D09425D37D1B00ADF489 /* init.h */,
+				522460B125CA026200573EF4 /* init.cc */,
+				5272D09525D3867300ADF489 /* xref.h */,
+				52C9DB6F25C5D5910054F0A3 /* xref.cc */,
 				F593E75E25C8B36A00AC26B1 /* SparseBundle.h */,
 				F593E75F25C8B36A00AC26B1 /* SparseBundle.cc */,
-				52C9DB6C25C5D3490054F0A3 /* subr.cc */,
-				52C9DB6F25C5D5910054F0A3 /* xref.cc */,
 				F5F236BA25C4939200FCC7BC /* receipts.c */,
 				720BE2E9120C909E00B3C4A5 /* digest.c */,
 				7227AB871098A7BF00BE33D7 /* buildlist */,
@@ -2461,6 +2468,7 @@
 				F5F236BE25C493C500FCC7BC /* darwinbuild.cc in Sources */,
 				52C9DB6E25C5D3510054F0A3 /* subr.cc in Sources */,
 				52C9DB8925C628900054F0A3 /* cfutils.c in Sources */,
+				522460B325CA027300573EF4 /* init.cc in Sources */,
 				52C9DB8725C6288B0054F0A3 /* DBPlugin.c in Sources */,
 				52C9DB8825C6288D0054F0A3 /* DBDataStore.c in Sources */,
 				52C9DB9025C62A850054F0A3 /* DBTclPlugin.c in Sources */,
